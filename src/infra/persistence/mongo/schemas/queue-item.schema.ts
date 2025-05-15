@@ -14,6 +14,7 @@ const QueueItemSchema = new Schema<IQueueItem>({
     orderId: {
         type: String,
         required: true,
+        unique: true,
     },
     pdvId: {
         type: String,
