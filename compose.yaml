@@ -1,0 +1,32 @@
+services:
+  db:
+    image: mongo:5.0
+    restart: unless-stopped
+    ports:
+      - ${MONGO_PORT:-27017}:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+    healthcheck:
+      test: >
+        bash -c 'mongo --username "$$MONGO_USER" --password "$$MONGO_PASS" --eval "db.adminCommand(\"ping\")"'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    volumes:
+      - db:/data/db
+
+  app:
+    build: .
+    volumes:
+      - .:/home/node/app
+    ports:
+      - ${PORT:-3000}:3000
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db:
+    driver: local
