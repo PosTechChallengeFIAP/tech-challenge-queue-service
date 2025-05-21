@@ -70,7 +70,7 @@ resource "aws_ecs_task_definition" "app_task" {
       environment = [
         {
           name  = "MONGO_HOST"
-          value = aws_docdb_cluster.docdb_cluster.endpoint
+          value = var.db_host
         },
         {
           name  = "MONGO_PORT"

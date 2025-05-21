@@ -8,6 +8,11 @@ variable "db_password" {
   type        = string
 }
 
+variable "db_host" {
+  description = "The host for the database"
+  type        = string
+}
+
 variable "tc_image_tag" {
   description = "Tag for the docker image"
   type        = string
