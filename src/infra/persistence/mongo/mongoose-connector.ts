@@ -38,11 +38,11 @@ export class MongooseConnector implements IDataBaseConnector {
                 message: '🔌 Connecting to MongoDB with Mongoose...'
             });
             Logger.info({
-                message: `🔌 MongoDB URI: mongodb://${user}:${pass}@${host}:${port}/${database}`
+                message: `🔌 MongoDB URI: mongodb+srv://${user}:${pass}@${host}:${port}/${database}`
             });
 
             this.mongooseConnection = await mongoose.connect(
-                `mongodb://${user}:${pass}@${host}:${port}`,
+                `mongodb+srv://${user}:${pass}@${host}:${port}`,
                 options
             );
             this.isConnectedFlag = true;
