@@ -1,6 +1,7 @@
 import mongoose, { ConnectOptions, Mongoose } from "mongoose";
 import { IDataBaseConnector } from "../IDataBaseConnector";
 import { mongoConfig } from "@config/variables/mongo";
+import { Logger } from "@infra/utils/logger/Logger";
 
 
 export class MongooseConnector implements IDataBaseConnector {
@@ -28,23 +29,27 @@ export class MongooseConnector implements IDataBaseConnector {
                 port,
                 user,
             } = mongoConfig
-            
+
             const options: ConnectOptions = {
                 dbName: database,
             }
 
-            console.log('🔌 Connecting to MongoDB with Mongoose...');
-            console.log(`🔌 MongoDB URI: mongodb://${user}:${pass}@${host}:${port}/${database}`);
+            Logger.info({
+                message: '🔌 Connecting to MongoDB with Mongoose...'
+            });
+            Logger.info({
+                message: `🔌 MongoDB URI: mongodb://${user}:${pass}@${host}:${port}/${database}`
+            });
 
             this.mongooseConnection = await mongoose.connect(
                 `mongodb://${user}:${pass}@${host}:${port}`,
                 options
             );
             this.isConnectedFlag = true;
-            console.log('✅ Connected to MongoDB with Mongoose');
+            Logger.info({ message: '✅ Connected to MongoDB with Mongoose' });
             return true;
-        } catch (error) {
-            console.error('❌ Mongoose connection error:', error);
+        } catch (error: any) {
+            Logger.error({ message: '❌ Mongoose connection error:', additionalInfo: error });
             return false;
         }
     }
@@ -58,10 +63,13 @@ export class MongooseConnector implements IDataBaseConnector {
         try {
             await this.mongooseConnection.disconnect();
             this.isConnectedFlag = false;
-            console.log('🔌 Disconnected from MongoDB with Mongoose');
+            Logger.info({ message: '🔌 Disconnected from MongoDB with Mongoose'});
             return true;
         } catch (error) {
-            console.error('❌ Mongoose disconnection error:', error);
+            Logger.error({
+                message: '❌ Mongoose disconnection error:', 
+                additionalInfo: error
+            });
             return false;
         }
     }

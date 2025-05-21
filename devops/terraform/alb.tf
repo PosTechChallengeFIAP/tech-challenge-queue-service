@@ -1,19 +1,19 @@
 resource "aws_lb" "ecs_lb" {
-  name               = "tech-challenge-queue-service-lb"
+  name               = "tc-queue-service-lb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [data.terraform_remote_state.network.outputs.queue_api_sg_id]
-  subnets            = [data.terraform_remote_state.network.outputs.queue_api_public_subnet_a_id, data.terraform_remote_state.network.outputs.queue_api_public_subnet_b_id]
+  security_groups    = [data.terraform_remote_state.network.outputs.main_sg_id]
+  subnets            = [data.terraform_remote_state.network.outputs.main_public_subnet_a_id, data.terraform_remote_state.network.outputs.main_public_subnet_b_id]
 
   enable_deletion_protection = false
 
   tags = {
-    Name = "tech-challenge-queue-service-lb"
+    Name = "tc-queue-service-lb"
   }
 }
 
 resource "aws_lb_target_group" "ecs_target_group" {
-  name        = "tech-challenge-queue-service-tg"
+  name        = "tc-queue-service-tg"
   port        = 3000
   protocol    = "HTTP"
   target_type = "ip"

@@ -1,11 +1,11 @@
 resource "aws_subnet" "private" {
   vpc_id                  = data.terraform_remote_state.network.outputs.main_vpc_id
-  cidr_block              = "10.0.7.0/24"
+  cidr_block              = "10.0.10.0/24"
   availability_zone       = "us-west-2a"
   map_public_ip_on_launch = false
 
   tags = {
-    Name = "tech-challenge-queue-ecs-private-subnet"
+    Name = "tc-queue-ecs-private-subnet"
   }
 }
 
@@ -15,10 +15,10 @@ resource "aws_eip" "nat" {
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = data.terraform_remote_state.network.outputs.queue_api_public_subnet_a_id
+  subnet_id     = data.terraform_remote_state.network.outputs.main_public_subnet_a_id
 
   tags = {
-    Name = "tech-challenge-queue-ecs-nat-gateway"
+    Name = "tc-queue-ecs-nat-gateway"
   }
 }
 
@@ -31,7 +31,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "tech-challenge-queue-api-private-route-table"
+    Name = "tc-queue-api-private-route-table"
   }
 }
 

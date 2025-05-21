@@ -1,5 +1,5 @@
 resource "aws_docdb_cluster" "docdb_cluster" {
-  cluster_identifier      = "tech-challenge-queue-docdb"
+  cluster_identifier      = "tc-queue-docdb"
   engine                  = "docdb"
   master_username         = var.db_username
   master_password         = var.db_password
@@ -9,7 +9,7 @@ resource "aws_docdb_cluster" "docdb_cluster" {
 }
 
 resource "aws_docdb_cluster_instance" "docdb_instance" {
-  identifier         = "tech-challenge-queue-docdb-instance"
+  identifier         = "tc-queue-docdb-instance"
   cluster_identifier = aws_docdb_cluster.docdb_cluster.id
   instance_class     = "db.t3.medium"
   apply_immediately  = true
