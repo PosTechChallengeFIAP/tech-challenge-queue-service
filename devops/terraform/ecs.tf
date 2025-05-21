@@ -26,7 +26,7 @@ resource "aws_ecs_service" "app_service" {
     type = "ECS"
   }
 
-  depends_on = [aws_db_instance.postgres, aws_instance.ecs_instance]
+  depends_on = [aws_docdb_cluster_instance.docdb_instance, aws_instance.ecs_instance]
 }
 
 resource "aws_ecs_task_definition" "app_task" {
