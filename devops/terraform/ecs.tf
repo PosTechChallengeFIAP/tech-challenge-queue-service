@@ -12,7 +12,7 @@ resource "aws_ecs_service" "app_service" {
 
   network_configuration {
     subnets          = [aws_subnet.private.id]
-    security_groups  = [data.terraform_remote_state.network.outputs.queue_api_sg_id]
+    security_groups  = [data.terraform_remote_state.network.outputs.main_sg_id]
     assign_public_ip = false
   }
 
