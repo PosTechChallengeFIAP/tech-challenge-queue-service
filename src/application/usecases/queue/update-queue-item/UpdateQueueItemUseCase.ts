@@ -3,6 +3,8 @@ import { TUpdateQueueItemUseCaseInput, TUpdateQueueItemUseCaseOutput } from "./T
 import { IUpdateQueueItemUseCase } from "./IUpdateQueueItemUseCase";
 import { IQueueItemRepository } from "@domain/repositories/IQueueItemRepository";
 import { QueueItem } from "@domain/models/queue-item";
+import { EQueueItemStatus } from "@domain/models/EQueueItemStatus";
+import { ESQSMessageType, SQSHandler } from "@infra/aws/sqs/sendMessage";
 
 @injectable()
 export class UpdateQueueItemUseCase implements IUpdateQueueItemUseCase {
@@ -32,6 +34,16 @@ export class UpdateQueueItemUseCase implements IUpdateQueueItemUseCase {
         queueItem.setStatus(status);
 
         const updatedQueueItem = await this.queueItemRepository.update(id, queueItem);
+
+        if (status === EQueueItemStatus.DONE) {
+            SQSHandler.sendMessage({
+                data: {
+                    orderId: updatedQueueItem.orderId,
+                    status: 'DONE'
+                },
+                type: ESQSMessageType.UPDATE_ORDER
+            })
+        }
 
         return updatedQueueItem;
     }
