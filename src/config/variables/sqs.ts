@@ -5,5 +5,5 @@ export const envSQS = Object.freeze({
     accessKeyId: env.get('AWS_ACCESS_KEY_ID').asString(),
     secretAccessKey: env.get('AWS_SECRET_ACCESS_KEY').asString(),
     awsSessionToken: env.get('AWS_SESSION_TOKEN').asString(),
-    endpoint: env.get('AWS_SQS_ENDPOINT').asString(),
+    orderQueue: env.get('ORDER_QUEUE_URL').asString(),
 })

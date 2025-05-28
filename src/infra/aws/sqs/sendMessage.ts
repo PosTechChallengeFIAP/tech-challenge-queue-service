@@ -24,7 +24,7 @@ export class SQSHandler {
     public static sendMessage = async (request: TSQSMessage) => {
         try {
             await sqsClient.send(new SendMessageCommand({
-                QueueUrl: process.env.SQS_QUEUE_URL,
+                QueueUrl: envSQS.orderQueue,
                 MessageBody: JSON.stringify(request),
             }))
         } catch (error) {
