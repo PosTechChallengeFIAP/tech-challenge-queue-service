@@ -4,6 +4,7 @@ import { IQueueItemRepository } from "@domain/repositories/IQueueItemRepository"
 import { TCreateQueueItemUseCaseInput, TCreateQueueItemUseCaseOutput } from "./TCreateQueueItemUseCase";
 import { IQueueItemToCreate } from "@application/DTOs/IQueueItemToCreate";
 import { EQueueItemStatus } from "@domain/models/EQueueItemStatus";
+import { ESQSMessageType, SQSHandler } from "@infra/aws/sqs/sendMessage";
 
 @injectable()
 export class CreateQueueItemUseCase implements ICreateQueueItemUseCase {
@@ -29,6 +30,14 @@ export class CreateQueueItemUseCase implements ICreateQueueItemUseCase {
         };
 
         const queueItem = await this.queueItemRepository.create(queueItemToCreate);
+
+        SQSHandler.sendMessage({
+            data: {
+                orderId,
+                status: 'QUEUED'
+            },
+            type: ESQSMessageType.UPDATE_ORDER
+        })
         return queueItem;
     }
 }
